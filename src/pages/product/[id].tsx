@@ -1,17 +1,18 @@
+import React from 'react';
 import type { NextPage } from 'next';
 import Head from 'next/head';
 import { Container, Stack } from '@mui/material';
 
 import { HeaderLogo, HeaderPromo, HeaderTabs } from '@components/header';
-import {
-  Gallery,
-  StoreSection,
-  TopCategoriesContainer,
-  TopSlides,
-} from '@components/main';
 import { CookiesWarning, FooterContainer } from '@components/footer';
+import {
+  ProductDetails,
+  ProductInfo,
+  ProductDescription,
+  RelatedProducts,
+} from '@components/product';
 
-const Home: NextPage = () => {
+const ProductPage: NextPage = () => {
   return (
     <div>
       <Head>
@@ -26,11 +27,13 @@ const Home: NextPage = () => {
         </Stack>
       </header>
       <main>
-        <Container maxWidth="lg" sx={{ py: 8, minHeight: '100vh' }}>
-          <TopSlides />
-          <TopCategoriesContainer />
-          <StoreSection />
-          <Gallery />
+        <Container maxWidth="xl">
+          <ProductInfo />
+        </Container>
+        <Container maxWidth="lg">
+          <ProductDetails />
+          <ProductDescription />
+          <RelatedProducts />
         </Container>
       </main>
       <footer>
@@ -41,4 +44,4 @@ const Home: NextPage = () => {
   );
 };
 
-export default Home;
+export default ProductPage;
