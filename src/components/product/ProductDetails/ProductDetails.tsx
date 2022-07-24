@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Image from 'next/image';
-import { Box, Divider, InputBase, Stack, Typography } from '@mui/material';
+import { Box, ButtonBase, Divider, InputBase, Stack, Typography } from '@mui/material';
 
 import { BrandButton, StarsReview } from '@components/common';
 import { Product } from 'data/products';
@@ -10,6 +10,8 @@ type ProductDetailsProps = {
 };
 
 export const ProductDetails = ({ product }: ProductDetailsProps) => {
+  const [imageIndex, setImageIndex] = useState(0);
+
   return (
     <Stack direction="row" alignItems="flex-start" justifyContent="center" spacing={4}>
       <Stack spacing={1} alignItems="flex-start">
@@ -19,7 +21,7 @@ export const ProductDetails = ({ product }: ProductDetailsProps) => {
           }}
         >
           <Image
-            src={product.images[0]}
+            src={product.images[imageIndex]}
             width={580}
             height={870}
             objectFit="contain"
@@ -33,17 +35,23 @@ export const ProductDetails = ({ product }: ProductDetailsProps) => {
           spacing={1}
         >
           {product.images.length > 1 &&
-            product.images.slice(1).map((image, index) => {
+            product.images.map((image, index) => {
               return (
-                <Box key={index}>
-                  <Image
-                    src={image}
-                    width={58}
-                    height={87}
-                    objectFit="contain"
-                    alt={product.name}
-                  />
-                </Box>
+                <ButtonBase key={index} onClick={
+                  () => {
+                    setImageIndex(index);
+                  }
+                }>
+                  <Box>
+                    <Image
+                      src={image}
+                      width={58}
+                      height={87}
+                      objectFit="contain"
+                      alt={product.name}
+                    />
+                  </Box>
+                </ButtonBase>
               );
             })}
         </Stack>
