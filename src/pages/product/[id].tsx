@@ -1,5 +1,5 @@
-import React from 'react';
-import type { NextPage } from 'next';
+import React, { useState } from 'react';
+import type { GetServerSideProps, GetServerSidePropsContext, NextPage } from 'next';
 import Head from 'next/head';
 import { Container, Stack } from '@mui/material';
 
@@ -11,8 +11,23 @@ import {
   ProductDescription,
   RelatedProducts,
 } from '@components/product';
+import {
+  forGirlsProducts,
+  forBoysProducts,
+  forBabiesProducts,
+  forHomeProducts,
+  forPlayProducts,
+  Product,
+} from 'data/products';
 
-const ProductPage: NextPage = () => {
+type ProductPageProps = {
+  product: Product;
+  category: Product[];
+};
+
+const ProductPage: NextPage<ProductPageProps> = (props) => {
+  const { product, category } = props;
+
   return (
     <div>
       <Head>
@@ -28,12 +43,12 @@ const ProductPage: NextPage = () => {
       </header>
       <main>
         <Container maxWidth="xl">
-          <ProductInfo />
+          <ProductInfo product={product} />
         </Container>
         <Container maxWidth="lg">
-          <ProductDetails />
+          <ProductDetails product={product} />
           <ProductDescription />
-          <RelatedProducts />
+          <RelatedProducts products={category}/>
         </Container>
       </main>
       <footer>
@@ -42,6 +57,70 @@ const ProductPage: NextPage = () => {
       </footer>
     </div>
   );
+};
+
+export const getServerSideProps: GetServerSideProps = async (
+  context: GetServerSidePropsContext,
+) => {
+  const productId = context.query.id?.toString();
+
+  if (!productId) {
+    context.res.statusCode = 404;
+    return { props: {} };
+  }
+
+  let product = forGirlsProducts.find((product) => product.id === productId);
+  if (product) {
+    return {
+      props: {
+        product,
+        category: forGirlsProducts,
+      },
+    };
+  }
+
+  product = forBoysProducts.find((product) => product.id === productId);
+  if (product) {
+    return {
+      props: {
+        product,
+        category: forBoysProducts,
+      },
+    };
+  }
+
+  product = forBabiesProducts.find((product) => product.id === productId);
+  if (product) {
+    return {
+      props: {
+        product,
+        category: forBabiesProducts,
+      },
+    };
+  }
+
+  product = forHomeProducts.find((product) => product.id === productId);
+  if (product) {
+    return {
+      props: {
+        product,
+        category: forHomeProducts,
+      },
+    };
+  }
+
+  product = forPlayProducts.find((product) => product.id === productId);
+  if (product) {
+    return {
+      props: {
+        product,
+        category: forPlayProducts,
+      },
+    };
+  }
+
+  context.res.statusCode = 404;
+  return { props: {} };
 };
 
 export default ProductPage;

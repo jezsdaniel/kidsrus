@@ -3,8 +3,13 @@ import Image from 'next/image';
 import { Box, Divider, InputBase, Stack, Typography } from '@mui/material';
 
 import { BrandButton, StarsReview } from '@components/common';
+import { Product } from 'data/products';
 
-export const ProductDetails = () => {
+type ProductDetailsProps = {
+  product: Product;
+};
+
+export const ProductDetails = ({ product }: ProductDetailsProps) => {
   return (
     <Stack direction="row" alignItems="flex-start" justifyContent="center" spacing={4}>
       <Stack spacing={1} alignItems="flex-start">
@@ -14,10 +19,11 @@ export const ProductDetails = () => {
           }}
         >
           <Image
-            src="/img/for girls/girls-2-2-580x870.jpg"
+            src={product.images[0]}
             width={580}
             height={870}
             objectFit="contain"
+            alt={product.name}
           />
         </Box>
         <Stack
@@ -26,22 +32,20 @@ export const ProductDetails = () => {
           justifyContent="flex-start"
           spacing={1}
         >
-          <Box>
-            <Image
-              src="/img/for girls/girls-2-2-580x870.jpg"
-              width={58}
-              height={87}
-              objectFit="contain"
-            />
-          </Box>
-          <Box>
-            <Image
-              src="/img/for girls/girls-2-3-580x870.jpg"
-              width={58}
-              height={87}
-              objectFit="contain"
-            />
-          </Box>
+          {product.images.length > 1 &&
+            product.images.slice(1).map((image, index) => {
+              return (
+                <Box key={index}>
+                  <Image
+                    src={image}
+                    width={58}
+                    height={87}
+                    objectFit="contain"
+                    alt={product.name}
+                  />
+                </Box>
+              );
+            })}
         </Stack>
       </Stack>
       <Stack
@@ -59,9 +63,9 @@ export const ProductDetails = () => {
             mb: 2,
           }}
         >
-          $22.00
+          ${product.price.toFixed(2)}
         </Typography>
-        <StarsReview stars={5} />
+        <StarsReview stars={product.review} />
         <Typography
           variant="body1"
           sx={{
@@ -118,11 +122,11 @@ export const ProductDetails = () => {
             width: '100%',
           }}
         >
-          <ProductDetailRow name="SKU:" value="001" />
+          <ProductDetailRow name="SKU:" value={product.id} />
           <Divider />
-          <ProductDetailRow name="Category:" value="For Girls" />
+          <ProductDetailRow name="Category:" value={product.category} />
           <Divider />
-          <ProductDetailRow name="Tags:" value="Blouse, Girls" />
+          <ProductDetailRow name="Tags:" value={`${product.category}, ${product.name}`} />
         </Box>
       </Stack>
     </Stack>

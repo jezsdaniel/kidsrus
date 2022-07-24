@@ -3,8 +3,13 @@ import Image from 'next/image';
 import { Box, Stack, Typography } from '@mui/material';
 
 import { StarsReview, TitleSection } from '@components/common';
+import { Product } from 'data/products';
 
-export const RelatedProducts = () => {
+type RelatedProductsProps = {
+  products: Product[];
+};
+
+export const RelatedProducts = ({ products }: RelatedProductsProps) => {
   return (
     <Stack alignItems="center">
       <TitleSection title="Related products" />
@@ -18,38 +23,19 @@ export const RelatedProducts = () => {
           mb: 6,
         }}
       >
-        <RelatedProductItem
-          image="/img/for girls/girls-1-1-580x870.jpg"
-          category="For Girls"
-          name="Blue Blouse"
-          price={22}
-          outOfStock
-          review={5}
-        />
-        <RelatedProductItem
-          image="/img/for girls/girls-1-1-580x870.jpg"
-          category="For Girls"
-          name="Blue Blouse"
-          price={22}
-          outOfStock
-          review={5}
-        />
-        <RelatedProductItem
-          image="/img/for girls/girls-1-1-580x870.jpg"
-          category="For Girls"
-          name="Blue Blouse"
-          price={22}
-          outOfStock
-          review={5}
-        />
-        <RelatedProductItem
-          image="/img/for girls/girls-1-1-580x870.jpg"
-          category="For Girls"
-          name="Blue Blouse"
-          price={22}
-          outOfStock
-          review={5}
-        />
+        {products.slice(0, 4).map((product, index) => {
+          return (
+            <RelatedProductItem
+              key={index}
+              image={product.images[0]}
+              category={product.category}
+              name={product.name}
+              price={product.price}
+              outOfStock={product.outOfStock}
+              review={product.review}
+            />
+          );
+        })}
       </Stack>
     </Stack>
   );

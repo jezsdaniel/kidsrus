@@ -1,7 +1,14 @@
 import React from 'react';
 import { Box, Typography } from '@mui/material';
+import Link from 'next/link';
 
-export const ProductInfo = () => {
+import { Product } from 'data/products';
+
+type ProductInfoProps = {
+  product: Product;
+};
+
+export const ProductInfo = ({ product }: ProductInfoProps) => {
   return (
     <Box
       sx={{
@@ -17,7 +24,7 @@ export const ProductInfo = () => {
       }}
     >
       <Typography variant="h3" fontFamily="GildaDisplay" color="secondary">
-        Blue Blouse
+        {product.name}
       </Typography>
       <Typography
         variant="subtitle2"
@@ -27,7 +34,23 @@ export const ProductInfo = () => {
           mt: 3,
         }}
       >
-        Home : For Girls : <span style={{ color: '#E5745D' }}>Blue Blouse</span>
+        Home :{' '}
+        <Link
+          href={{
+            pathname: '/',
+            query: { category: product.category.toLowerCase().replace(' ', '-') },
+          }}
+        >
+          <a
+            style={{
+              textDecoration: 'none',
+              color: '#486683',
+            }}
+          >
+            {product.category}{' '}
+          </a>
+        </Link>{' '}
+        : <span style={{ color: '#E5745D' }}>{product.name}</span>
       </Typography>
     </Box>
   );

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import Image from 'next/image';
+import { useRouter } from 'next/router';
 import { Box, ButtonBase, Grid, Stack, Typography } from '@mui/material';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import SearchIcon from '@mui/icons-material/Search';
@@ -16,6 +17,7 @@ export const StoreGrid = ({ products }: StoreGridProps) => {
       {products.map((product, index) => (
         <StoreGridItem
           key={index}
+          id={product.id}
           images={product.images}
           category={product.category}
           name={product.name}
@@ -28,6 +30,7 @@ export const StoreGrid = ({ products }: StoreGridProps) => {
 };
 
 type StoreGridItemProps = {
+  id: string;
   name: string;
   images: string[];
   price: number;
@@ -36,6 +39,7 @@ type StoreGridItemProps = {
 };
 
 const StoreGridItem = ({
+  id,
   name,
   images,
   price,
@@ -44,9 +48,14 @@ const StoreGridItem = ({
 }: StoreGridItemProps) => {
   const [hover, setHover] = useState(false);
 
+  const router = useRouter();
+
   return (
     <Grid item xs={4}>
       <ButtonBase
+        onClick={() => {
+          router.push(`/product/${id}`);
+        }}
         onMouseOver={() => {
           setHover(true);
         }}

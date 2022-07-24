@@ -1,5 +1,5 @@
-import type { NextPage } from 'next';
 import { useEffect, useState } from 'react';
+import type { GetServerSideProps, GetServerSidePropsContext, NextPage } from 'next';
 import Head from 'next/head';
 import { Container, Stack } from '@mui/material';
 
@@ -21,19 +21,29 @@ import {
 } from 'data/products';
 import { shuffleArray } from 'utils/utils';
 
-const Home: NextPage = () => {
+type ProductPageProps = {
+  category?: Product[];
+};
+
+const Home: NextPage<ProductPageProps> = (props) => {
+  const { category } = props;
+
   const [showingProducts, setShowingProducts] = useState<Product[]>([]);
 
   useEffect(() => {
-    const products = shuffleArray([
-      ...forGirlsProducts,
-      ...forBoysProducts,
-      ...forBabiesProducts,
-      ...forHomeProducts,
-      ...forPlayProducts,
-    ]).slice(0, 9);
-    setShowingProducts(products);
-  }, []);
+    if (category) {
+      setShowingProducts(category);
+    } else {
+      const products = shuffleArray([
+        ...forGirlsProducts,
+        ...forBoysProducts,
+        ...forBabiesProducts,
+        ...forHomeProducts,
+        ...forPlayProducts,
+      ]).slice(0, 9);
+      setShowingProducts(products);
+    }
+  }, [category]);
 
   const handleSetCategory = (products: Product[]) => {
     setShowingProducts(products);
@@ -69,3 +79,55 @@ const Home: NextPage = () => {
 };
 
 export default Home;
+
+export const getServerSideProps: GetServerSideProps = async (
+  context: GetServerSidePropsContext,
+) => {
+  const categoryName = context.query.category?.toString();
+
+  if (!categoryName) {
+    return { props: {} };
+  }
+
+  if (categoryName === 'for-boys') {
+    return {
+      props: {
+        category: forBoysProducts,
+      },
+    };
+  }
+
+  if (categoryName === 'for-girls') {
+    return {
+      props: {
+        category: forGirlsProducts,
+      },
+    };
+  }
+
+  if (categoryName === 'for-babies') {
+    return {
+      props: {
+        category: forGirlsProducts,
+      },
+    };
+  }
+
+  if (categoryName === 'for-home') {
+    return {
+      props: {
+        category: forGirlsProducts,
+      },
+    };
+  }
+
+  if (categoryName === 'for-play') {
+    return {
+      props: {
+        category: forGirlsProducts,
+      },
+    };
+  }
+
+  return { props: {} };
+};
