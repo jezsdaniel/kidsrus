@@ -3,8 +3,13 @@ import { Stack } from '@mui/material';
 
 import { SearchProductsInput } from '@components/common';
 import { BestSellers, CategoriesMenu, JoinNewsletter } from '@components/main';
+import { Product } from 'data/products';
 
-export const StoreMenu = () => {
+type StoreMenuProps = {
+  onSetCategory: (products: Product[]) => void;
+};
+
+export const StoreMenu = ({ onSetCategory }: StoreMenuProps) => {
   return (
     <Stack
       sx={{
@@ -12,7 +17,7 @@ export const StoreMenu = () => {
       }}
     >
       <SearchProductsInput />
-      <CategoriesMenu />
+      <CategoriesMenu onSetCategory={onSetCategory} />
       <BestSellers />
       <JoinNewsletter />
     </Stack>
